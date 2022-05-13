@@ -7,3 +7,10 @@
 /P2PServer/P2PServer.vcxproj.user
 /P2PServer/x64/
 /x64/
+/P2PManagedClientB.Tests/bin/
+/P2PManagedClientB.Tests/obj/
+/P2PNativeClientA.Tests/P2PNativeClientA.Tests.vcxproj.user
+/P2PNativeClientA.Tests/x64/
+/P2PServer.Tests/P2PServer.Tests.vcxproj.user
+/P2PServer.Tests/x64/
+/packages/
