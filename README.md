@@ -12,5 +12,5 @@ Each project have its own unit test project beside (Project.Tests)
 ZMQ / NetMQ middleware is used as messaging layer 
 https://zeromq.org/
 
-RappidJson is used as serializer layer for native side 
-https://rapidjson.org/
+Plan structs will be used to exchange messages for this test.
+To be improved by using a specific serialization (JSON for instance).

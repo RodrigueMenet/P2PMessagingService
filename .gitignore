@@ -1,0 +1,9 @@
+/.vs
+/P2PManagedClientB/bin/
+/P2PManagedClientB/obj/
+/P2PManagedClientB/P2PManagedClientB.csproj.user
+/P2PNativeClientA/P2PNativeClientA.vcxproj.user
+/P2PNativeClientA/x64/
+/P2PServer/P2PServer.vcxproj.user
+/P2PServer/x64/
+/x64/
