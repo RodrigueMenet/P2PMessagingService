@@ -9,5 +9,8 @@ P2PMessagingService.sln availabe containing 3 projects producing executables:
 
 Each project have its own unit test project beside (Project.Tests)
 
-ZMQ / NetMQ middleware is used as messaging layer https://zeromq.org/
-rappidjson is used as serializer layer for native side https://rapidjson.org/
+ZMQ / NetMQ middleware is used as messaging layer 
+https://zeromq.org/
+
+RappidJson is used as serializer layer for native side 
+https://rapidjson.org/
