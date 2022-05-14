@@ -38,12 +38,18 @@ void ZmqReplier::Stop()
 }
 
 
-std::unique_ptr<IMessage> ZmqReplier::Receive()
+std::unique_ptr<IMessage> ZmqReplier::Receive(int timeoutMs)
 {
+  SetTimeout(timeoutMs);
   auto msg = std::make_unique<ZmqReceivedMessage>();
   const auto recv = zmq_recv(mSocket, msg->Data(), msg->Size(), 0);
 
-  if(recv < 0)
+  if(recv < 0 && errno == EAGAIN)
+  {
+    return nullptr;
+  }
+
+  if(recv < 0) // error handling
   {
     std::stringstream ss;
     ss << __FUNCTION__ << " receive data " << zmq_strerror(errno) << std::endl;
@@ -57,6 +63,9 @@ std::unique_ptr<IMessage> ZmqReplier::Receive()
 
 void ZmqReplier::SetTimeout(int timeout_ms)
 {
+  if(mTimeoutMs == timeout_ms)
+    return;
+
   const auto rc = zmq_setsockopt(mSocket, ZMQ_RCVTIMEO, &timeout_ms, sizeof(timeout_ms));
 
   if(rc < 0)
@@ -65,6 +74,8 @@ void ZmqReplier::SetTimeout(int timeout_ms)
     ss << __FUNCTION__ << " " << "error when defining timeout " << zmq_strerror(errno) << std::endl;
     throw std::exception{ss.str().c_str()};
   }
+
+  mTimeoutMs = timeout_ms;
 }
 
 

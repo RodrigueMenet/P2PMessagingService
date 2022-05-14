@@ -77,5 +77,8 @@
     <ClInclude Include="..\Common\IMessage.h">
       <Filter>MiddleWare</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\SimpleMessage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

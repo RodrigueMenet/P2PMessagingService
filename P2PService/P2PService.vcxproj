@@ -34,6 +34,7 @@
     <ClInclude Include="..\Common\IReplier.h" />
     <ClInclude Include="..\Common\IRequester.h" />
     <ClInclude Include="..\Common\ISubscriber.h" />
+    <ClInclude Include="..\Common\SimpleMessage.h" />
     <ClInclude Include="..\Common\ZmqFactory.h" />
     <ClInclude Include="..\Common\ZmqPublisher.h" />
     <ClInclude Include="..\Common\ZmqReceivedMessage.h" />
