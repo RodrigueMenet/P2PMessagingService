@@ -36,10 +36,10 @@ void ZmqPublisher::Stop()
 }
 
 
-void ZmqPublisher::Send(const Message& message)
+void ZmqPublisher::Send(const IMessage& message)
 {
-  const auto rc = zmq_send(mSocket, message.data(), message.size(), 0);
-  if(rc != message.size())
+  const auto rc = zmq_send(mSocket, message.Data(), message.Size(), 0);
+  if(rc != message.Size())
   {
     std::cerr << __FUNCTION__ << " " << "rc = " << rc << std::endl;
   }

@@ -1,4 +1,4 @@
-#include "ZmqSubscriber.h"
+#include "ZmqRequester.h"
 
 #include <ostream>
 #include <sstream>
@@ -7,13 +7,13 @@
 #include "ZmqReceivedMessage.h"
 
 
-ZmqSubscriber::ZmqSubscriber(void* socket, std::string url)
+ZmqRequester::ZmqRequester(void* socket, std::string url)
   : mSocket(socket), mUrl(std::move(url))
 {
 }
 
 
-void ZmqSubscriber::Start()
+void ZmqRequester::Start()
 {
   auto rc = zmq_connect(mSocket, mUrl.c_str());
   if(rc)
@@ -34,16 +34,24 @@ void ZmqSubscriber::Start()
 }
 
 
-void ZmqSubscriber::Stop()
+void ZmqRequester::Stop()
 {
   zmq_close(mSocket);
 }
 
 
-std::unique_ptr<IMessage> ZmqSubscriber::Receive()
+std::unique_ptr<IMessage> ZmqRequester::Request(const IMessage& msg)
 {
-  auto msg = std::make_unique<ZmqReceivedMessage>();
-  const auto recv = zmq_recv(mSocket, msg->Data(), msg->Size(), 0);
+  const auto rc = zmq_send(mSocket, msg.Data(), msg.Size(), 0);
+  if(rc != msg.Size())
+  {
+    std::stringstream ss;
+    ss << __FUNCTION__ << " sent data " << zmq_strerror(errno) << std::endl;
+    throw std::exception{ss.str().c_str()};
+  }
+
+  auto rcvd_msg = std::make_unique<ZmqReceivedMessage>();
+  const auto recv = zmq_recv(mSocket, rcvd_msg->Data(), rcvd_msg->Size(), 0);
 
   if(recv < 0)
   {
@@ -52,12 +60,12 @@ std::unique_ptr<IMessage> ZmqSubscriber::Receive()
     throw std::exception{ss.str().c_str()};
   }
 
-  msg->SetSize(recv);
-  return msg;
+  rcvd_msg->SetSize(recv);
+  return rcvd_msg;
 }
 
 
-void ZmqSubscriber::SetTimeout(int timeout_ms)
+void ZmqRequester::SetTimeout(int timeout_ms)
 {
   const auto rc = zmq_setsockopt(mSocket, ZMQ_RCVTIMEO, &timeout_ms, sizeof(timeout_ms));
 

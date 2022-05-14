@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "IPublisher.h"
 
 
@@ -8,7 +10,7 @@ struct ZmqPublisher : IPublisher
   ZmqPublisher(void* socket, const std::string& url);
   void Start() override;
   void Stop() override;
-  void Send(const Message&) override;
+  void Send(const IMessage&) override;
 
 private:
   void* mSocket;

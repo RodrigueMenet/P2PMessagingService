@@ -19,7 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\ZmqFactory.cpp" />
+    <ClCompile Include="..\Common\ZmqPublisher.cpp" />
+    <ClCompile Include="..\Common\ZmqReceivedMessage.cpp" />
+    <ClCompile Include="..\Common\ZmqReplier.cpp" />
+    <ClCompile Include="..\Common\ZmqRequester.cpp" />
+    <ClCompile Include="..\Common\ZmqSubscriber.cpp" />
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\IMessage.h" />
+    <ClInclude Include="..\Common\IMiddleWare.h" />
+    <ClInclude Include="..\Common\IPublisher.h" />
+    <ClInclude Include="..\Common\IReplier.h" />
+    <ClInclude Include="..\Common\IRequester.h" />
+    <ClInclude Include="..\Common\ISubscriber.h" />
+    <ClInclude Include="..\Common\ZmqFactory.h" />
+    <ClInclude Include="..\Common\ZmqPublisher.h" />
+    <ClInclude Include="..\Common\ZmqReceivedMessage.h" />
+    <ClInclude Include="..\Common\ZmqReplier.h" />
+    <ClInclude Include="..\Common\ZmqRequester.h" />
+    <ClInclude Include="..\Common\ZmqSubscriber.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -45,7 +65,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -68,6 +88,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Zmq\zmq.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />

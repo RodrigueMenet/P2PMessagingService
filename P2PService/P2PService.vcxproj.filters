@@ -13,10 +13,69 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="MiddleWare">
+      <UniqueIdentifier>{ab208769-25df-4cb8-8d9d-3e13e23ecb9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Common\ZmqFactory.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqPublisher.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqReplier.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqRequester.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqSubscriber.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqReceivedMessage.cpp">
+      <Filter>MiddleWare</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\IMiddleWare.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\IPublisher.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\IReplier.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\IRequester.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ISubscriber.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqFactory.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqPublisher.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqReplier.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqRequester.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqSubscriber.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ZmqReceivedMessage.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\IMessage.h">
+      <Filter>MiddleWare</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

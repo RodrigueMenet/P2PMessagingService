@@ -1,16 +1,18 @@
 #pragma once
 
+#include <memory>
 #include <string>
-#include "ISubscriber.h"
+#include "IRequester.h"
 
 
-struct ZmqSubscriber : ISubscriber
+struct ZmqRequester : IRequester
 {
-  ZmqSubscriber(void* socket, std::string url);
+  ZmqRequester(void* socket, std::string url);
   void Start() override;
   void Stop() override;
-  std::unique_ptr<IMessage> Receive() override;
+  std::unique_ptr<IMessage> Request(const IMessage&) override;
   void SetTimeout(int timeout_ms) override;
+
 private:
   void* mSocket;
   std::string const mUrl;

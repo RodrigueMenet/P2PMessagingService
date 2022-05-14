@@ -1,7 +1,5 @@
 #pragma once
-#include <string>
-
-#include "Message.h"
+#include "IMessage.h"
 
 
 struct IPublisher
@@ -10,5 +8,5 @@ struct IPublisher
 
   virtual void Start() = 0;
   virtual void Stop() = 0;
-  virtual void Send(const Message&) = 0;
+  virtual void Send(const IMessage&) = 0;
 };
