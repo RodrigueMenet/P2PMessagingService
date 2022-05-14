@@ -2,16 +2,18 @@
 
 Developed with Visual Studio 2022 (toolset **142**)
 
-P2PMessagingService.sln availabe containing 3 projects producing executables:
+P2PMessagingService.sln availabe containing 2 projects producing executables:
 * P2PService (C++14 console application)
-* P2PNativeClientA (C++14 console application)
-* P2PManagedClientB (.NET 5.0)
+* P2PUIClient (C++14 console application)
 
 Each project have its own unit test project beside (Project.Tests)
 
-ZMQ / NetMQ middleware is used as messaging layer 
+ZMQ middleware is used as messaging layer 
 https://zeromq.org/
 
 Shortcuts for test purpose:
 * only ***DEBUG / x64*** configuration is supported
 * only one test class per test project, would be better to create one classe per tested class Class.Tests.cpp
+* everything has been done locally (127.0.0.1 ip adress used)
+* plain structures have been used ; any serialization would bring a lot more flexibility (e.g. JSON)
+* no namespace used
