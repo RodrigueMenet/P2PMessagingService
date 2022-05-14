@@ -2,7 +2,7 @@
 /*
  *  FakeIt - A Simplified C++ Mocking Framework
  *  Copyright (c) Eran Pe'er 2013
- *  Generated: 2018-08-17 00:22:40.428924
+ *  Generated: 2021-05-12 13:47:04.979584
  *  Distributed under the MIT License. Please refer to the LICENSE file at:
  *  https://github.com/eranpeer/FakeIt
  */
@@ -983,7 +983,19 @@ namespace fakeit {
         }
     };
 }
+#include <exception>
+
+
 namespace fakeit {
+#if __cplusplus >= 201703L || defined(__cpp_lib_uncaught_exceptions)
+    inline bool UncaughtException () {
+        return std::uncaught_exceptions() >= 1;
+    }
+#else
+    inline bool UncaughtException () {
+      return std::uncaught_exception();
+    }
+#endif
 
     struct FakeitException {
         std::exception err;
@@ -1119,6 +1131,11 @@ namespace fakeit {
     }
 
 }
+#if __has_include("catch2/catch.hpp")
+#   include <catch2/catch.hpp>
+#else
+#   include <catch.hpp>
+#endif
 
 namespace fakeit {
 
@@ -1202,13 +1219,14 @@ namespace fakeit {
                 std::string fomattedMessage,
                 Catch::ResultWas::OfType resultWas = Catch::ResultWas::OfType::ExpressionFailed ){
             Catch::AssertionHandler catchAssertionHandler( vetificationType, sourceLineInfo, failingExpression, Catch::ResultDisposition::Normal );
- INTERNAL_CATCH_TRY { \
-					CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS \
-					catchAssertionHandler.handleMessage(resultWas, fomattedMessage); \
-					CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS \
-			} INTERNAL_CATCH_CATCH(catchAssertionHandler) { \
-					INTERNAL_CATCH_REACT(catchAssertionHandler) \
-			}
+            INTERNAL_CATCH_TRY { \
+                CATCH_INTERNAL_START_WARNINGS_SUPPRESSION \
+                CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS \
+                catchAssertionHandler.handleMessage(resultWas, fomattedMessage); \
+                CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION \
+            } INTERNAL_CATCH_CATCH(catchAssertionHandler) { \
+                INTERNAL_CATCH_REACT(catchAssertionHandler) \
+            }
         }
 
         virtual void handle(const UnexpectedMethodCallEvent &evt) override {
@@ -5300,9 +5318,16 @@ namespace fakeit {
 
     };
 }
+#if defined(__GNUG__) && !defined(__clang__)
+#define FAKEIT_NO_DEVIRTUALIZE_ATTR [[gnu::optimize("no-devirtualize")]]
+#else
+#define FAKEIT_NO_DEVIRTUALIZE_ATTR
+#endif
+
 namespace fakeit {
 
     template<typename TARGET, typename SOURCE>
+    FAKEIT_NO_DEVIRTUALIZE_ATTR
     TARGET union_cast(SOURCE source) {
 
         union {
@@ -5324,12 +5349,19 @@ namespace fakeit {
     class VTUtils {
     public:
 
+#if defined(__GNUG__) && !defined(__clang__) && __GNUC__ >= 8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
         template<typename C, typename R, typename ... arglist>
         static unsigned int getOffset(R (C::*vMethod)(arglist...)) {
             auto sMethod = reinterpret_cast<unsigned int (VirtualOffsetSelector::*)(int)>(vMethod);
             VirtualOffsetSelector offsetSelctor;
             return (offsetSelctor.*sMethod)(0);
         }
+#if defined(__GNUG__) && !defined(__clang__) && __GNUC__ >= 8
+#pragma GCC diagnostic pop
+#endif
 
         template<typename C>
         static typename std::enable_if<std::has_virtual_destructor<C>::value, unsigned int>::type
@@ -5468,6 +5500,7 @@ namespace fakeit {
 			signature(0), offset(0), cdOffset(0),
 			typeDescriptorOffset(0), classDescriptorOffset(0)
 		{
+                    (void)unused;
 		}
 
 		dword_ signature;
@@ -5817,73 +5850,78 @@ namespace fakeit {
 }
 #include <new>
 
-namespace fakeit {
 
-#ifdef __GNUG__
-#ifndef __clang__
-#pragma GCC diagnostic ignored "-Wpedantic"
-#endif
-#endif
+namespace fakeit
+{
+    namespace details
+    {
+        template <int instanceAreaSize, typename C, typename... BaseClasses>
+        class FakeObjectImpl
+        {
+        public:
+            void initializeDataMembersArea()
+            {
+                for (size_t i = 0; i < instanceAreaSize; ++i)
+                {
+                    instanceArea[i] = (char) 0;
+                }
+            }
 
+        protected:
+            VirtualTable<C, BaseClasses...> vtable;
+            char instanceArea[instanceAreaSize];
+        };
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4200 )
-#endif
+        template <typename C, typename... BaseClasses>
+        class FakeObjectImpl<0, C, BaseClasses...>
+        {
+        public:
+            void initializeDataMembersArea()
+            {}
 
+        protected:
+            VirtualTable<C, BaseClasses...> vtable;
+        };
+    }
 
-    template<typename C, typename ... baseclasses>
-    class FakeObject {
-
-        VirtualTable<C, baseclasses...> vtable;
-
-        static const size_t SIZE = sizeof(C) - sizeof(VirtualTable<C, baseclasses...>);
-        char instanceArea[SIZE ? SIZE : 0];
-
-        FakeObject(FakeObject const &) = delete;
-        FakeObject &operator=(FakeObject const &) = delete;
+    template <typename C, typename... BaseClasses>
+    class FakeObject
+        : public details::FakeObjectImpl<sizeof(C) - sizeof(VirtualTable<C, BaseClasses...>), C, BaseClasses...>
+    {
+        FakeObject(FakeObject const&) = delete;
+        FakeObject& operator=(FakeObject const&) = delete;
 
     public:
-
-        FakeObject() : vtable() {
-            initializeDataMembersArea();
+        FakeObject()
+        {
+            this->initializeDataMembersArea();
         }
 
-        ~FakeObject() {
-            vtable.dispose();
+        ~FakeObject()
+        {
+            this->vtable.dispose();
         }
 
-        void initializeDataMembersArea() {
-            for (size_t i = 0; i < SIZE; ++i) instanceArea[i] = (char) 0;
+        void setMethod(unsigned int index, void* method)
+        {
+            this->vtable.setMethod(index, method);
         }
 
-        void setMethod(unsigned int index, void *method) {
-            vtable.setMethod(index, method);
+        VirtualTable<C, BaseClasses...>& getVirtualTable()
+        {
+            return this->vtable;
         }
 
-        VirtualTable<C, baseclasses...> &getVirtualTable() {
-            return vtable;
+        void setVirtualTable(VirtualTable<C, BaseClasses...>& t)
+        {
+            this->vtable = t;
         }
 
-        void setVirtualTable(VirtualTable<C, baseclasses...> &t) {
-            vtable = t;
-        }
-
-        void setDtor(void *dtor) {
-            vtable.setDtor(dtor);
+        void setDtor(void* dtor)
+        {
+            this->vtable.setDtor(dtor);
         }
     };
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
-
-#ifdef __GNUG__
-#ifndef __clang__
-#pragma GCC diagnostic pop
-#endif
-#endif
-
 }
 namespace fakeit {
 
@@ -6185,31 +6223,31 @@ namespace fakeit {
 
     template<int N>
     struct apply_func {
-        template<typename R, typename ... ArgsF, typename ... ArgsT, typename ... Args>
-        static R applyTuple(std::function<R(ArgsF &...)> f, std::tuple<ArgsT...> &t, Args &... args) {
-            return apply_func<N - 1>::template applyTuple(f, t, std::get<N - 1>(t), args...);
+        template<typename R, typename ... ArgsF, typename ... ArgsT, typename ... Args, typename FunctionType>
+        static R applyTuple(FunctionType&& f, std::tuple<ArgsT...> &t, Args &... args) {
+            return apply_func<N - 1>::template applyTuple<R>(std::forward<FunctionType>(f), t, std::get<N - 1>(t), args...);
         }
     };
 
     template<>
     struct apply_func < 0 > {
-        template<typename R, typename ... ArgsF, typename ... ArgsT, typename ... Args>
-        static R applyTuple(std::function<R(ArgsF &...)> f, std::tuple<ArgsT...> & , Args &... args) {
-            return f(args...);
+        template<typename R, typename ... ArgsF, typename ... ArgsT, typename ... Args, typename FunctionType>
+        static R applyTuple(FunctionType&& f, std::tuple<ArgsT...> & , Args &... args) {
+            return std::forward<FunctionType>(f)(args...);
         }
     };
 
     struct TupleDispatcher {
 
-        template<typename R, typename ... ArgsF, typename ... ArgsT>
-        static R applyTuple(std::function<R(ArgsF &...)> f, std::tuple<ArgsT...> &t) {
-            return apply_func<sizeof...(ArgsT)>::template applyTuple(f, t);
+        template<typename R, typename ... ArgsF, typename ... ArgsT, typename FunctionType>
+        static R applyTuple(FunctionType&& f, std::tuple<ArgsT...> &t) {
+            return apply_func<sizeof...(ArgsT)>::template applyTuple<R>(std::forward<FunctionType>(f), t);
         }
 
-        template<typename R, typename ...arglist>
-        static R invoke(std::function<R(arglist &...)> func, const std::tuple<arglist...> &arguments) {
+        template<typename R, typename ...arglist, typename FunctionType>
+        static R invoke(FunctionType&& func, const std::tuple<arglist...> &arguments) {
             std::tuple<arglist...> &args = const_cast<std::tuple<arglist...> &>(arguments);
-            return applyTuple(func, args);
+            return applyTuple<R>(std::forward<FunctionType>(func), args);
         }
 
         template<typename TupleType, typename FunctionType>
@@ -7029,7 +7067,7 @@ namespace fakeit {
     template<int q>
     struct Times : public Quantity {
 
-        Times<q>() : Quantity(q) { }
+        Times() : Quantity(q) { }
 
         template<typename R>
         static Quantifier<R> of(const R &value) {
@@ -8475,7 +8513,7 @@ namespace fakeit {
 
             virtual ~StubbingChange() THROWS {
 
-                if (std::uncaught_exception()) {
+                if (UncaughtException()) {
                     return;
                 }
 
@@ -8735,7 +8773,7 @@ namespace fakeit {
         friend class SequenceVerificationProgress;
 
         ~SequenceVerificationExpectation() THROWS {
-            if (std::uncaught_exception()) {
+            if (UncaughtException()) {
                 return;
             }
             VerifyExpectation(_fakeit);
@@ -9083,7 +9121,7 @@ namespace fakeit {
             friend class VerifyNoOtherInvocationsVerificationProgress;
 
             ~VerifyNoOtherInvocationsExpectation() THROWS {
-                if (std::uncaught_exception()) {
+                if (UncaughtException()) {
                     return;
                 }
 
@@ -9336,7 +9374,7 @@ namespace fakeit {
 #endif
 
 #define MOCK_TYPE(mock) \
-    std::remove_reference<decltype(mock.get())>::type
+    std::remove_reference<decltype((mock).get())>::type
 
 #define OVERLOADED_METHOD_PTR(mock, method, prototype) \
     fakeit::Prototype<prototype>::MemberType<MOCK_TYPE(mock)>::get(&MOCK_TYPE(mock)::method)
@@ -9345,16 +9383,16 @@ namespace fakeit {
     fakeit::Prototype<prototype>::MemberType<MOCK_TYPE(mock)>::getconst(&MOCK_TYPE(mock)::method)
 
 #define Dtor(mock) \
-    mock.dtor().setMethodDetails(#mock,"destructor")
+    (mock).dtor().setMethodDetails(#mock,"destructor")
 
 #define Method(mock, method) \
-    mock.template stub<__COUNTER__>(&MOCK_TYPE(mock)::method).setMethodDetails(#mock,#method)
+    (mock).template stub<__COUNTER__>(&MOCK_TYPE(mock)::method).setMethodDetails(#mock,#method)
 
 #define OverloadedMethod(mock, method, prototype) \
-    mock.template stub<__COUNTER__>(OVERLOADED_METHOD_PTR( mock , method, prototype )).setMethodDetails(#mock,#method)
+    (mock).template stub<__COUNTER__>(OVERLOADED_METHOD_PTR( mock , method, prototype )).setMethodDetails(#mock,#method)
 
 #define ConstOverloadedMethod(mock, method, prototype) \
-    mock.template stub<__COUNTER__>(CONST_OVERLOADED_METHOD_PTR( mock , method, prototype )).setMethodDetails(#mock,#method)
+    (mock).template stub<__COUNTER__>(CONST_OVERLOADED_METHOD_PTR( mock , method, prototype )).setMethodDetails(#mock,#method)
 
 #define Verify(...) \
         Verify( __VA_ARGS__ ).setFileInfo(__FILE__, __LINE__, __func__)

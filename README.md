@@ -17,3 +17,4 @@ Shortcuts for test purpose:
 * everything has been done locally (127.0.0.1 ip adress used)
 * plain structures have been used ; any serialization would bring a lot more flexibility (e.g. JSON)
 * no namespace used
+* Zmq classes are not unit tested, only Service and Client aspect (assuming they are delivered as a third party)
