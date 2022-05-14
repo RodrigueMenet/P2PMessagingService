@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <string>
+
 #include "IPublisher.h"
 #include "ISubscriber.h"
 

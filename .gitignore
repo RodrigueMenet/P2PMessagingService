@@ -17,3 +17,7 @@
 /P2PUIClient/x64/
 /P2PService/P2PService.vcxproj.user
 /P2PService/x64/
+/P2PService.Tests/P2PService.Tests.vcxproj.user
+/P2PService.Tests/x64/
+/P2PUIClient.Tests/P2PUIClient.Tests.vcxproj.user
+/P2PUIClient.Tests/x64/
