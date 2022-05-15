@@ -18,3 +18,4 @@ Shortcuts for test purpose:
 * plain structures have been used ; any serialization would bring a lot more flexibility (e.g. JSON)
 * no namespace used
 * Zmq classes are not unit tested, only Service and Client aspect (assuming they are delivered as a third party)
+* No ServiceStarter (on server side) created, would be cleaner to do so (here P2PService class, start async task, would be the purpose of the ServiceStarter not to hide this from Service Class Perspective and tests)

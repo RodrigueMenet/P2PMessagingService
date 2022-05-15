@@ -22,13 +22,27 @@ void P2PService::Start(const std::string& serverurl)
     while(Stopped == false)
     {
       const auto msg = mRegistry.Receive(10);
-      if(msg && msg->GetHeader().Idx == MessageType::PeerRegister)
+      if(msg && msg->GetHeader().Id == MessageType::PeerRegister)
       {
-        // ack
-        mRegistry.Send(SimpleMessage(MessageType::PeerRegisterAck));
+        if(ClientUIDs.size() >= MAX_CLIENT_NUMBER)
+        {
+          std::cerr << "NEW client registration refused : max client number reached (" << MAX_CLIENT_NUMBER << ")";
+          continue;
+        }
 
         // update users list
-        ClientUIDs.push_back(msg->Payload<PeerRegisterPayload>().UID);
+        try
+        {
+          ClientUIDs.push_back(msg->Payload<PeerRegisterPayload>().UID);
+        }
+        catch(const std::exception& ex)
+        {
+          std::cerr << "NEW client registration refused : unexpected message content (err : " << ex.what() << ")";
+          continue;
+        }
+
+        // ack
+        mRegistry.Send(SimpleMessage(MessageType::PeerRegisterAck));
 
         // build new list
         PeersAvailablePayload payload{};
@@ -42,9 +56,6 @@ void P2PService::Start(const std::string& serverurl)
         mNotifier.Send(PayloadMessage<PeersAvailablePayload>{MessageType::PeersAvailable, payload});
       }
     }
-
-    mRegistry.Stop();
-    mNotifier.Stop();
   });
 }
 
@@ -59,4 +70,7 @@ void P2PService::WaitForShutDown()
 void P2PService::Stop()
 {
   Stopped = true;
+  mAsyncDo.get();
+  mRegistry.Stop();
+  mNotifier.Stop();
 }

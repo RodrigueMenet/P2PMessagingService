@@ -6,6 +6,7 @@
 
 enum class MessageType : uint8_t
 {
+  Unknown = 0xff,
   PeerRegister = 0,
   PeersAvailable = 1,
   P2pMessage = 2,
@@ -20,15 +21,18 @@ struct PeerRegisterPayload
 };
 
 
+const auto MAX_CLIENT_NUMBER = 100;
+
+
 struct PeersAvailablePayload
 {
-  uint8_t UIDs[20];
+  uint8_t UIDs[MAX_CLIENT_NUMBER];
 };
 
 
 struct Header
 {
-  MessageType Idx;
+  MessageType Id;
 };
 
 
