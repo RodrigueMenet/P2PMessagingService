@@ -32,7 +32,7 @@ TEST_CASE("P2PService")
     {
       fakeit::When(Method(mock_registry, Receive)).AlwaysDo([](int& timeoutMs)
       {
-        return std::make_unique<SimpleMessage>(MessageType::P2pMessage);
+        return std::make_unique<SimpleMessage>(MessageType::PeerMessage);
       });
 
       CHECK_NOTHROW(service.Start("1.2.3.4"));
@@ -45,7 +45,7 @@ TEST_CASE("P2PService")
         bool sent_once = false;
         fakeit::When(Method(mock_registry, Receive)).AlwaysDo([&sent_once](int& timeoutMS)
         {
-          return std::make_unique<SimpleMessage>(sent_once ? MessageType::Life : MessageType::PeerRegister);
+          return std::make_unique<SimpleMessage>(sent_once ? MessageType::PeersAvailable : MessageType::PeerRegister);
         });
         CHECK_NOTHROW(service.Start("1.2.3.4"));
       }
@@ -62,11 +62,7 @@ TEST_CASE("P2PService")
           sent_once = true;
           return sent_msg;
         });
-        MessageType sent_registry_id = MessageType::Unknown, sent_notifier_id = MessageType::Unknown;
-        fakeit::When(Method(mock_registry, Send)).Do([&sent_registry_id](const IMessage& message)
-        {
-          sent_registry_id = message.GetHeader().Id;
-        });
+        MessageType sent_notifier_id = MessageType::Unknown;
 
         fakeit::When(Method(mock_notifier, Send)).Do([&sent_notifier_id](const IMessage& message)
         {
@@ -76,7 +72,6 @@ TEST_CASE("P2PService")
         CHECK_NOTHROW(service.Start("1.2.3.4"));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        CHECK(sent_registry_id == MessageType::PeerRegisterAck);
         CHECK(sent_notifier_id == MessageType::PeersAvailable);
       }
     }

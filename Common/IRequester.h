@@ -1,5 +1,6 @@
 #pragma once
 #include "IMessage.h"
+#include <memory>
 
 
 struct IRequester

@@ -9,9 +9,7 @@ enum class MessageType : uint8_t
   Unknown = 0xff,
   PeerRegister = 0,
   PeersAvailable = 1,
-  P2pMessage = 2,
-  Life = 3,
-  PeerRegisterAck = 4,
+  PeerMessage = 2
 };
 
 
@@ -21,12 +19,21 @@ struct PeerRegisterPayload
 };
 
 
-const auto MAX_CLIENT_NUMBER = 100;
+constexpr auto MAX_CLIENT_NUMBER = 100;
 
 
 struct PeersAvailablePayload
 {
   uint8_t UIDs[MAX_CLIENT_NUMBER];
+};
+
+
+constexpr auto MAX_MESSAGE_SIZE = 200;
+
+
+struct PeerDisplayMessage
+{
+  wchar_t Message[MAX_MESSAGE_SIZE];
 };
 
 

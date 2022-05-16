@@ -10,6 +10,5 @@ struct ISubscriber
 
   virtual void Start() = 0;
   virtual void Stop() = 0;
-  virtual std::unique_ptr<IMessage> Receive() = 0;
-  virtual void SetTimeout(int timeout_ms) = 0;
+  virtual std::unique_ptr<IMessage> Receive(int timeoutMs) = 0;
 };

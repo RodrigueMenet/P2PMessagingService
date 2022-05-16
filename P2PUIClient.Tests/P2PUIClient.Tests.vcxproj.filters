@@ -18,5 +18,8 @@
     <ClCompile Include="P2PUIClient.Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\P2PUIClient\P2PClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,3 +19,6 @@ Shortcuts for test purpose:
 * no namespace used
 * Zmq classes are not unit tested, only Service and Client aspect (assuming they are delivered as a third party)
 * No ServiceStarter (on server side) created, would be cleaner to do so (here P2PService class, start async task, would be the purpose of the ServiceStarter not to hide this from Service Class Perspective and tests)
+* Error or Empty Answer are not well managed
+* No log system
+* Would be better to use std::chrono (or homemade class overriding std::chrono ; e.g. stdx::chrono) instead of timeoutMs everywhere ; to bring more flexibility about units usage

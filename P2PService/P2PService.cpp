@@ -41,9 +41,6 @@ void P2PService::Start(const std::string& serverurl)
           continue;
         }
 
-        // ack
-        mRegistry.Send(SimpleMessage(MessageType::PeerRegisterAck));
-
         // build new list
         PeersAvailablePayload payload{};
         auto i = 0;
