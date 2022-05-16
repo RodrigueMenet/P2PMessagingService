@@ -28,7 +28,7 @@ TEST_CASE("P2PService")
       CHECK_NOTHROW(service.Start("1.2.3.4"));
     }
 
-    SECTION("Not managed message have been received")
+    SECTION("Not managed message have been received -> no sent data")
     {
       fakeit::When(Method(mock_registry, Receive)).AlwaysDo([](int& timeoutMs)
       {
