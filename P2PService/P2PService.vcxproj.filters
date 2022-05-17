@@ -39,6 +39,9 @@
     <ClCompile Include="..\Common\ZmqReceivedMessage.cpp">
       <Filter>MiddleWare</Filter>
     </ClCompile>
+    <ClCompile Include="P2PService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\IMiddleWare.h">

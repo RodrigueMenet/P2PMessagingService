@@ -11,7 +11,7 @@ TEST_CASE("P2PClient")
   fakeit::Mock<ISubscriber> mock_server_subscriber;
   fakeit::Mock<IReplier> mock_peer_replier;
   fakeit::Mock<IRequester> mock_peer_requester;
-  fakeit::Fake(Dtor(mock_peer_requester)); // else dtor is called when shared_ptr is released, leading to a sefault
+  fakeit::Fake(Dtor(mock_peer_requester)); // else dtor is called when shared_ptr is released, leading to a segfault
 
 
   const auto CLIENT_UID = 16;

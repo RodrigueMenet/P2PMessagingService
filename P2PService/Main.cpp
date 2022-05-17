@@ -3,8 +3,17 @@
 
 #include <iostream>
 
+#include "P2PService.h"
+#include "ZmqFactory.h"
+
 
 int main()
 {
-  std::cout << "Hello World!\n";
+  ZmqFactory factory;
+  const auto replier = factory.BuildReplier(SERVER_URL);
+  const auto publisher = factory.BuildPublisher(SERVER_URL);
+  P2PService service(*replier, *publisher);
+  service.Start();
+  service.WaitForShutDown();
+  service.Stop();
 }

@@ -25,7 +25,7 @@ TEST_CASE("P2PService")
         return nullptr;
       });
 
-      CHECK_NOTHROW(service.Start("1.2.3.4"));
+      CHECK_NOTHROW(service.Start());
     }
 
     SECTION("Not managed message have been received -> no sent data")
@@ -35,7 +35,7 @@ TEST_CASE("P2PService")
         return std::make_unique<SimpleMessage>(MessageType::PeerMessage);
       });
 
-      CHECK_NOTHROW(service.Start("1.2.3.4"));
+      CHECK_NOTHROW(service.Start());
       // registry::send not mocked up -> ok
     }
     SECTION("Register message have been received")
@@ -47,7 +47,7 @@ TEST_CASE("P2PService")
         {
           return std::make_unique<SimpleMessage>(sent_once ? MessageType::PeersAvailable : MessageType::PeerRegister);
         });
-        CHECK_NOTHROW(service.Start("1.2.3.4"));
+        CHECK_NOTHROW(service.Start());
       }
 
       SECTION("With Expected payload -> ack + updated list sent")
@@ -69,7 +69,7 @@ TEST_CASE("P2PService")
           sent_notifier_id = message.Header().Id;
         });
 
-        CHECK_NOTHROW(service.Start("1.2.3.4"));
+        CHECK_NOTHROW(service.Start());
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         CHECK(sent_notifier_id == MessageType::PeersAvailable);
@@ -96,7 +96,7 @@ TEST_CASE("P2PService")
         sent_peer_payloads.push_back(*message.SpecificPayload<PeersAvailablePayload>());
       });
 
-      CHECK_NOTHROW(service.Start("1.2.3.4"));
+      CHECK_NOTHROW(service.Start());
 
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       CHECK(sent_peer_payloads.size() == 3);

@@ -4,6 +4,8 @@
 #include <zmq.h>
 
 #include "ZmqPublisher.h"
+#include "ZmqReplier.h"
+#include "ZmqRequester.h"
 #include "ZmqSubscriber.h"
 
 
@@ -48,6 +50,36 @@ std::shared_ptr<IPublisher> ZmqFactory::BuildPublisher(std::string const& url) c
   }
 
   return std::make_shared<ZmqPublisher>(socket, url);
+}
+
+
+std::shared_ptr<IRequester> ZmqFactory::BuildRequester(std::string const& url) const
+{
+  auto* const socket = zmq_socket(mContext, ZMQ_REQ);
+
+  if(socket == nullptr)
+  {
+    std::stringstream ss;
+    ss << __FUNCTION__ << " " << "zmq_socket ZMQ_PUB errno " << errno << std::endl;
+    throw std::exception(ss.str().c_str());
+  }
+
+  return std::make_shared<ZmqRequester>(socket, url);
+}
+
+
+std::shared_ptr<IReplier> ZmqFactory::BuildReplier(std::string const& url) const
+{
+  auto* const socket = zmq_socket(mContext, ZMQ_REP);
+
+  if(socket == nullptr)
+  {
+    std::stringstream ss;
+    ss << __FUNCTION__ << " " << "zmq_socket ZMQ_PUB errno " << errno << std::endl;
+    throw std::exception(ss.str().c_str());
+  }
+
+  return std::make_shared<ZmqReplier>(socket, url);
 }
 
 

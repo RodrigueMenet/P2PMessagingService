@@ -1,5 +1,8 @@
 #pragma once
-#include "IMiddleWare.h"
+
+#include "IPublisher.h"
+#include "IReplier.h"
+
 #include <map>
 #include <future>
 #include <list>
@@ -7,7 +10,7 @@
 struct P2PService
 {
   P2PService(IReplier& registry,  IPublisher& notifier);
-  void Start(const std::string& serverurl);
+  void Start();
   void Stop();
   void WaitForShutDown();
 

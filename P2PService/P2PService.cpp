@@ -12,7 +12,7 @@ P2PService::P2PService(IReplier& registry, IPublisher& notifier)
 }
 
 
-void P2PService::Start(const std::string& serverurl)
+void P2PService::Start()
 {
   mRegistry.Start();
   mNotifier.Start();
