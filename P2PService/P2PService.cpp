@@ -22,7 +22,7 @@ void P2PService::Start(const std::string& serverurl)
     while(Stopped == false)
     {
       const auto msg = mRegistry.Receive(10);
-      if(msg && msg->GetHeader().Id == MessageType::PeerRegister)
+      if(msg && msg->Header().Id == MessageType::PeerRegister)
       {
         if(ClientUIDs.size() >= MAX_CLIENT_NUMBER)
         {
@@ -33,7 +33,7 @@ void P2PService::Start(const std::string& serverurl)
         // update users list
         try
         {
-          ClientUIDs.push_back(msg->Payload<PeerRegisterPayload>().UID);
+          ClientUIDs.push_back(msg->SpecificPayload<PeerRegisterPayload>()->UID);
         }
         catch(const std::exception& ex)
         {

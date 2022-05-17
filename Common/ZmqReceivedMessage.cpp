@@ -1,5 +1,6 @@
 #include "ZmQReceivedMessage.h"
 
+
 void ZmqReceivedMessage::SetSize(size_t newsize)
 {
   mData.resize(newsize);
@@ -15,7 +16,7 @@ ZmqReceivedMessage::ZmqReceivedMessage()
 }
 
 
-Header ZmqReceivedMessage::GetHeader() const
+MsgHeader ZmqReceivedMessage::Header() const
 {
   return {static_cast<MessageType>(mData.at(0))};
 }
@@ -24,6 +25,12 @@ Header ZmqReceivedMessage::GetHeader() const
 const uint8_t* ZmqReceivedMessage::Data() const
 {
   return mData.data();
+}
+
+
+const uint8_t* ZmqReceivedMessage::Payload() const
+{
+  return Data() + sizeof(MsgHeader);
 }
 
 

@@ -11,7 +11,6 @@ struct ZmqRequester : IRequester
   void Start() override;
   void Stop() override;
   std::unique_ptr<IMessage> Request(const IMessage&) override;
-  void SetTimeout(int timeout_ms) override;
 
 private:
   void* mSocket;

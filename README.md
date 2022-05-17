@@ -22,3 +22,4 @@ Shortcuts for test purpose:
 * Error or Empty Answer are not well managed
 * No log system
 * Would be better to use std::chrono (or homemade class overriding std::chrono ; e.g. stdx::chrono) instead of timeoutMs everywhere ; to bring more flexibility about units usage
+* exceptions handling can be a lot improved

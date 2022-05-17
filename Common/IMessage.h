@@ -37,7 +37,7 @@ struct PeerDisplayMessage
 };
 
 
-struct Header
+struct MsgHeader
 {
   MessageType Id;
 };
@@ -46,21 +46,20 @@ struct Header
 struct IMessage
 {
   virtual ~IMessage() = default;
-  virtual Header GetHeader() const = 0;
+  virtual MsgHeader Header() const = 0;
   virtual const uint8_t* Data() const = 0;
+  virtual const uint8_t* Payload() const = 0;
   template <typename T>
-  const T& Payload() const;
+  const T* SpecificPayload() const;
   virtual size_t Size() const = 0;
 };
 
 
 template <typename T>
-const T& IMessage::Payload() const
+const T* IMessage::SpecificPayload() const
 {
-  if(Data() == nullptr || Size() < sizeof(T) + sizeof(Header))
+  if(Payload() == nullptr || Size() < sizeof(T) + sizeof(MsgHeader))
     throw std::exception{"unexpected cast"};
 
-  const auto& payload = Data() + sizeof(Header);
-
-  return reinterpret_cast<const T&>(*payload);
+  return reinterpret_cast<const T*>(Payload());
 }

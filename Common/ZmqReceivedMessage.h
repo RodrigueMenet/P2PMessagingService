@@ -8,8 +8,9 @@
 struct ZmqReceivedMessage : IMessage
 {
   ZmqReceivedMessage();
-  Header GetHeader() const override;
+  MsgHeader Header() const override;
   const uint8_t* Data() const override;
+  const uint8_t* Payload() const override;
   size_t Size() const override;
 
   uint8_t* Data();

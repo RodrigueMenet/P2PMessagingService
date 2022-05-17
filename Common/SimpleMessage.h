@@ -6,8 +6,9 @@
 struct SimpleMessage : IMessage
 {
   SimpleMessage(MessageType type);
-  Header GetHeader() const override;
+  MsgHeader Header() const override;
   const uint8_t* Data() const override;
+  const uint8_t* Payload() const override;
   size_t Size() const override;
 private:
   MessageType mType;
@@ -20,7 +21,7 @@ inline SimpleMessage::SimpleMessage(MessageType type)
 }
 
 
-inline Header SimpleMessage::GetHeader() const
+inline MsgHeader SimpleMessage::Header() const
 {
   return {mType};
 }
@@ -28,13 +29,19 @@ inline Header SimpleMessage::GetHeader() const
 
 inline const uint8_t* SimpleMessage::Data() const
 {
-  return reinterpret_cast<const uint8_t*>(&mType);
+  return reinterpret_cast<const uint8_t*>(this);
+}
+
+
+inline const uint8_t* SimpleMessage::Payload() const
+{
+  return nullptr;
 }
 
 
 inline size_t SimpleMessage::Size() const
 {
-  return sizeof(mType);
+  return sizeof(*this);
 }
 
 
@@ -42,39 +49,47 @@ template <typename T>
 struct PayloadMessage : IMessage
 {
   PayloadMessage(MessageType type, const T& payload);
-  Header GetHeader() const override;
+  MsgHeader Header() const override;
   const uint8_t* Data() const override;
+  const uint8_t* Payload() const override;
   size_t Size() const override;
 private:
-  MessageType mType;
+  MsgHeader mHeader;
   T mPayload;
 };
 
 
 template <typename T>
 PayloadMessage<T>::PayloadMessage(MessageType type, const T& payload)
-  : mType(type)
+  : mHeader{type}
     , mPayload(payload)
 {
 }
 
 
 template <typename T>
-Header PayloadMessage<T>::GetHeader() const
+MsgHeader PayloadMessage<T>::Header() const
 {
-  return {mType};
+  return mHeader;
 }
 
 
 template <typename T>
 const uint8_t* PayloadMessage<T>::Data() const
 {
-  return reinterpret_cast<const uint8_t*>(&mType);
+  return reinterpret_cast<const uint8_t*>(this);
+}
+
+
+template <typename T>
+const uint8_t* PayloadMessage<T>::Payload() const
+{
+  return reinterpret_cast<const uint8_t*>(&mPayload);
 }
 
 
 template <typename T>
 size_t PayloadMessage<T>::Size() const
 {
-  return sizeof(mType) + sizeof(mPayload);
+  return sizeof(*this);
 }

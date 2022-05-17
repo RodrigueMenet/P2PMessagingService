@@ -66,7 +66,7 @@ TEST_CASE("P2PService")
 
         fakeit::When(Method(mock_notifier, Send)).Do([&sent_notifier_id](const IMessage& message)
         {
-          sent_notifier_id = message.GetHeader().Id;
+          sent_notifier_id = message.Header().Id;
         });
 
         CHECK_NOTHROW(service.Start("1.2.3.4"));
@@ -93,7 +93,7 @@ TEST_CASE("P2PService")
       std::vector<PeersAvailablePayload> sent_peer_payloads;
       fakeit::When(Method(mock_notifier, Send)).AlwaysDo([&sent_peer_payloads](const IMessage& message)
       {
-        sent_peer_payloads.push_back(message.Payload<PeersAvailablePayload>());
+        sent_peer_payloads.push_back(*message.SpecificPayload<PeersAvailablePayload>());
       });
 
       CHECK_NOTHROW(service.Start("1.2.3.4"));

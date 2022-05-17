@@ -63,16 +63,3 @@ std::unique_ptr<IMessage> ZmqRequester::Request(const IMessage& msg)
   rcvd_msg->SetSize(recv);
   return rcvd_msg;
 }
-
-
-void ZmqRequester::SetTimeout(int timeout_ms)
-{
-  const auto rc = zmq_setsockopt(mSocket, ZMQ_RCVTIMEO, &timeout_ms, sizeof(timeout_ms));
-
-  if(rc < 0)
-  {
-    std::stringstream ss;
-    ss << __FUNCTION__ << " " << "error when defining timeout " << zmq_strerror(errno) << std::endl;
-    throw std::exception{ss.str().c_str()};
-  }
-}
