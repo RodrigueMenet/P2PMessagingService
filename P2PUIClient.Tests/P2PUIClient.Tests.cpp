@@ -21,13 +21,14 @@ TEST_CASE("P2PClient")
   {
     fakeit::When(Method(mock_server_requester, Start)).Return();
     fakeit::When(Method(mock_server_subscriber, Start)).Return();
+    fakeit::When(Method(mock_peer_replier, Start)).Return();
     uint8_t received_uid;
     fakeit::When(Method(mock_server_requester, Request)).Do([&received_uid](const IMessage& message)
     {
       received_uid = message.SpecificPayload<PeerRegisterPayload>()->UID;
       return nullptr;
     });
-    client.ConnectToServer();
+    client.Start();
     CHECK(received_uid == CLIENT_UID);
 
     SECTION("Peers available received -> peers ids returned")
@@ -65,5 +66,6 @@ TEST_CASE("P2PClient")
 
   fakeit::When(Method(mock_server_requester, Stop)).Return();
   fakeit::When(Method(mock_server_subscriber, Stop)).Return();
+  fakeit::When(Method(mock_peer_replier, Stop)).Return();
   client.Stop();
 }

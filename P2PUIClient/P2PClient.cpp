@@ -16,11 +16,13 @@ P2PClient::P2PClient(IRequester& serverRequester, ISubscriber& serverSubscriber,
 }
 
 
-void P2PClient::ConnectToServer() const
+void P2PClient::Start() const
 {
   mServerRequester.Start();
-  mServerSubscriber.Start();
   mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
+
+  mServerSubscriber.Start();
+  mPeerReplier.Start();
 }
 
 
@@ -81,6 +83,7 @@ void P2PClient::Stop()
 {
   mServerRequester.Stop();
   mServerSubscriber.Stop();
+  mPeerReplier.Stop();
   for (const auto & peer : mPeerRequesters)
   {
     peer.second->Stop();

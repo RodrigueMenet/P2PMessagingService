@@ -50,7 +50,7 @@ BOOL CP2PUIClientDlg::OnInitDialog()
   SetIcon(m_hIcon, FALSE);		// Set small icon
 
   // TODO: Add extra initialization here
-
+  mClient.Start();
   return TRUE;  // return TRUE  unless you set the focus to a control
 }
 

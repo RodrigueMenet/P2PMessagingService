@@ -13,7 +13,7 @@ struct P2PClient
 {
   P2PClient(IRequester& serverRequester, ISubscriber& serverSubscriber, IReplier& peerReplier, uint8_t uid);
 
-  void ConnectToServer() const;
+  void Start() const;
 
   void AddPeer(int id, const std::shared_ptr<IRequester>& peerRequester);
   void SendMessageToPeer(int id, const std::wstring& msg);
