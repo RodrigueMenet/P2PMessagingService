@@ -44,7 +44,7 @@ std::unique_ptr<IMessage> ZmqSubscriber::Receive(int timeoutMs)
 {
   SetTimeout(timeoutMs);
   auto msg = std::make_unique<ZmqReceivedMessage>();
-  const auto recv = zmq_recv(mSocket, msg->Data(), msg->Size(), 0);
+  const auto recv = zmq_recv(mSocket, msg->Get(), msg->Size(), 0);
 
   if(recv < 0)
   {
@@ -52,8 +52,7 @@ std::unique_ptr<IMessage> ZmqSubscriber::Receive(int timeoutMs)
     ss << __FUNCTION__ << " receive data " << zmq_strerror(errno) << std::endl;
     throw std::exception{ss.str().c_str()};
   }
-
-  msg->SetSize(recv);
+  
   return msg;
 }
 

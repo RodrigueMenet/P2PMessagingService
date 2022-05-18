@@ -54,15 +54,20 @@ struct PayloadMessage : IMessage
   const uint8_t* Payload() const override;
   size_t Size() const override;
 private:
-  MsgHeader mHeader;
-  T mPayload;
+  struct ToSendData
+  {
+    MsgHeader mHeader;
+    T mPayload;
+  };
+
+
+  ToSendData mToSend;
 };
 
 
 template <typename T>
 PayloadMessage<T>::PayloadMessage(MessageType type, const T& payload)
-  : mHeader{type}
-    , mPayload(payload)
+  : mToSend{{type}, payload}
 {
 }
 
@@ -70,26 +75,26 @@ PayloadMessage<T>::PayloadMessage(MessageType type, const T& payload)
 template <typename T>
 MsgHeader PayloadMessage<T>::Header() const
 {
-  return mHeader;
+  return mToSend.mHeader;
 }
 
 
 template <typename T>
 const uint8_t* PayloadMessage<T>::Data() const
 {
-  return reinterpret_cast<const uint8_t*>(this);
+  return reinterpret_cast<const uint8_t*>(&mToSend);
 }
 
 
 template <typename T>
 const uint8_t* PayloadMessage<T>::Payload() const
 {
-  return reinterpret_cast<const uint8_t*>(&mPayload);
+  return reinterpret_cast<const uint8_t*>(&mToSend.mPayload);
 }
 
 
 template <typename T>
 size_t PayloadMessage<T>::Size() const
 {
-  return sizeof(*this);
+  return sizeof(mToSend);
 }

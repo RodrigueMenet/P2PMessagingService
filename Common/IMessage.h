@@ -4,18 +4,22 @@
 #include <exception>
 
 
-enum class MessageType : uint8_t
+enum class MessageType
 {
   Unknown = 0xff,
   PeerRegister = 0,
   PeersAvailable = 1,
-  PeerMessage = 2
+  PeerMessage = 2,
+  PeerRegisterAck = 3,
 };
+
+
+using PeerUID = short;
 
 
 struct PeerRegisterPayload
 {
-  uint8_t UID;
+  PeerUID UID;
 };
 
 
@@ -24,7 +28,7 @@ constexpr auto MAX_CLIENT_NUMBER = 100;
 
 struct PeersAvailablePayload
 {
-  uint8_t UIDs[MAX_CLIENT_NUMBER];
+  PeerUID UIDs[MAX_CLIENT_NUMBER];
 };
 
 

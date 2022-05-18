@@ -15,7 +15,7 @@ CP2PUIClientDlg::CP2PUIClientDlg(uint8_t uid, CWnd* pParent /*=nullptr*/)
   : CDialogEx(IDD_P2PUICLIENT_DIALOG, pParent)
     , mUID(uid)
     , mServerRequester(mFactory.BuildRequester(BuildServerCompleteUrl(false)))
-    , mServerSubscriber(mFactory.BuildSubscriber(BuildServerCompleteUrl(false)))
+    , mServerSubscriber(mFactory.BuildSubscriber(BuildServerCompleteUrl(true)))
     , mPeerReplier(mFactory.BuildReplier(BuildPeerCompleteUrl(uid)))
     , mClient(*mServerRequester, *mServerSubscriber, *mPeerReplier, uid)
 {

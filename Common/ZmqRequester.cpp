@@ -22,15 +22,6 @@ void ZmqRequester::Start()
     ss << __FUNCTION__ << " " << "zmq_connect " << rc << std::endl;
     throw std::exception{ss.str().c_str()};
   }
-
-  rc = zmq_setsockopt(mSocket, ZMQ_SUBSCRIBE, nullptr, 0);
-
-  if(rc)
-  {
-    std::stringstream ss;
-    ss << __FUNCTION__ << " " << "zmq_setsockopt subscribe" << rc << std::endl;
-    throw std::exception{ss.str().c_str()};
-  }
 }
 
 
@@ -51,7 +42,7 @@ std::unique_ptr<IMessage> ZmqRequester::Request(const IMessage& msg)
   }
 
   auto rcvd_msg = std::make_unique<ZmqReceivedMessage>();
-  const auto recv = zmq_recv(mSocket, rcvd_msg->Data(), rcvd_msg->Size(), 0);
+  const auto recv = zmq_recv(mSocket, rcvd_msg->Get(), rcvd_msg->Size(), 0);
 
   if(recv < 0)
   {
@@ -59,7 +50,6 @@ std::unique_ptr<IMessage> ZmqRequester::Request(const IMessage& msg)
     ss << __FUNCTION__ << " receive data " << zmq_strerror(errno) << std::endl;
     throw std::exception{ss.str().c_str()};
   }
-
-  rcvd_msg->SetSize(recv);
+  
   return rcvd_msg;
 }

@@ -25,7 +25,7 @@ struct P2PClient
   void Stop();
 
 private:
-  const uint8_t mUID;
+  const short mUID;
   IRequester& mServerRequester;
   ISubscriber& mServerSubscriber;
   IReplier& mPeerReplier;

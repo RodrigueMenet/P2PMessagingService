@@ -19,5 +19,5 @@ private:
   std::atomic<bool> Stopped = false;
   IReplier& mRegistry;
   IPublisher& mNotifier;
-  std::list<uint8_t> ClientUIDs;
+  std::list<PeerUID> ClientUIDs;
 };

@@ -33,13 +33,17 @@ void P2PService::Start()
         // update users list
         try
         {
-          ClientUIDs.push_back(msg->SpecificPayload<PeerRegisterPayload>()->UID);
+          const auto newid = msg->SpecificPayload<PeerRegisterPayload>()->UID;
+          ClientUIDs.push_back(newid);
+          std::cout << "Client " << newid << " registered !" << std::endl;
         }
         catch(const std::exception& ex)
         {
           std::cerr << "NEW client registration refused : unexpected message content (err : " << ex.what() << ")";
           continue;
         }
+
+        mRegistry.Send(SimpleMessage(MessageType::PeerMessage));
 
         // build new list
         PeersAvailablePayload payload{};

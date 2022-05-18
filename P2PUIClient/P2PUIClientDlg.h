@@ -37,10 +37,10 @@ public:
   afx_msg void OnTimer(UINT_PTR nIDEvent);
 
 private:
+  uint8_t mUID;
   ZmqFactory mFactory;
-  P2PClient mClient;
   std::shared_ptr<IRequester> mServerRequester;
   std::shared_ptr<ISubscriber> mServerSubscriber;
   std::shared_ptr<IReplier> mPeerReplier;
-  uint8_t mUID;
+  P2PClient mClient;
 };
