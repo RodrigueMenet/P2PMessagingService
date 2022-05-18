@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Middleware">
+      <UniqueIdentifier>{b24de466-60cf-4015-9644-f554b836e85f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="P2PUIClient.h">
@@ -49,6 +52,24 @@
     </ClCompile>
     <ClCompile Include="P2PClient.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqFactory.cpp">
+      <Filter>Middleware</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqPublisher.cpp">
+      <Filter>Middleware</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqReceivedMessage.cpp">
+      <Filter>Middleware</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqReplier.cpp">
+      <Filter>Middleware</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqRequester.cpp">
+      <Filter>Middleware</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\ZmqSubscriber.cpp">
+      <Filter>Middleware</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

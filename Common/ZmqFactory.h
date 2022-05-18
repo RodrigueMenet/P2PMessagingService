@@ -19,7 +19,7 @@ inline std::string BuildServerCompleteUrl(bool publisher)
 
 inline std::string BuildPeerCompleteUrl(int id)
 {
-  return std::string("tcp://") + SERVER_URL + ":" + std::to_string(SERVER_PORT + id);
+  return std::string("tcp://") + SERVER_URL + ":" + std::to_string(SERVER_PORT + id + 1);
 }
 
 

@@ -23,3 +23,4 @@ Shortcuts for test purpose:
 * No log system
 * Would be better to use std::chrono (or homemade class overriding std::chrono ; e.g. stdx::chrono) instead of timeoutMs everywhere ; to bring more flexibility about units usage
 * exceptions handling can be a lot improved
+* parameter handling in client execution ; to be improved (to be replaced by a real GUID)

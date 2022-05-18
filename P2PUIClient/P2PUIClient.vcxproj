@@ -89,7 +89,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -194,6 +194,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\ZmqFactory.cpp" />
+    <ClCompile Include="..\Common\ZmqPublisher.cpp" />
+    <ClCompile Include="..\Common\ZmqReceivedMessage.cpp" />
+    <ClCompile Include="..\Common\ZmqReplier.cpp" />
+    <ClCompile Include="..\Common\ZmqRequester.cpp" />
+    <ClCompile Include="..\Common\ZmqSubscriber.cpp" />
     <ClCompile Include="P2PClient.cpp" />
     <ClCompile Include="P2PUIClient.cpp" />
     <ClCompile Include="P2PUIClientDlg.cpp" />
