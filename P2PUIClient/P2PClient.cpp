@@ -40,6 +40,7 @@ std::vector<int> P2PClient::ConnectToServer()
 void P2PClient::AddPeer(int id, const std::shared_ptr<IRequester>& peerRequester)
 {
   mPeerRequesters[id] = peerRequester;
+  peerRequester->Start();
 }
 
 
@@ -48,7 +49,9 @@ void P2PClient::SendMessageToPeer(int id, const std::wstring& msg)
   try
   {
     PeerDisplayMessage payload;
-    msg.copy(payload.Message, min(msg.size(), MAX_MESSAGE_SIZE));
+    const auto size = min(msg.size(), MAX_MESSAGE_SIZE);
+    msg.copy(payload.Message, size);
+    payload.Message[size-1] = 0;
     mPeerRequesters.at(id)->Request(PayloadMessage<PeerDisplayMessage>(MessageType::PeerMessage, payload));
   }
   catch(const std::exception& ex)
@@ -65,6 +68,7 @@ std::wstring P2PClient::ReceiveMessageFromAnyPeer(int timeoutMs) const
   if(msg)
   {
     const auto payload = msg->SpecificPayload<PeerDisplayMessage>();
+    mPeerReplier.Send(SimpleMessage(MessageType::PeerMessageAck));
     return std::wstring(payload->Message, wcslen(payload->Message));
   }
   return L"";

@@ -11,6 +11,7 @@ enum class MessageType
   PeersAvailable = 1,
   PeerMessage = 2,
   PeerRegisterAck = 3,
+  PeerMessageAck = 4,
 };
 
 
