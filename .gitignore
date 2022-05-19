@@ -23,3 +23,6 @@
 /P2PUIClient.Tests/x64/
 /P2PUIClient/P2PUIClient.vcxproj.user
 /P2PMessagingService.sln.DotSettings.user
+/Dummy/Dummy.vcxproj.user
+/Dummy/x64/
+/P2PMessagingService.sln.DotSettings.user

@@ -47,12 +47,18 @@ BOOL CP2PUIClientDlg::OnInitDialog()
 {
   CDialogEx::OnInitDialog();
 
+  SetWindowText((std::wstring(L"P2PUiClient ") + std::to_wstring(mUID)).c_str());
+
   // Set the icon for this dialog.  The framework does this automatically
   //  when the application's main window is not a dialog
   SetIcon(m_hIcon, TRUE);			// Set big icon
   SetIcon(m_hIcon, FALSE);		// Set small icon
 
   mClient.Start();
+
+  const auto peers = mClient.ConnectToServer();
+  UpdateCombobox(peers);
+
   SetTimer(PEER_TIMER, 100, nullptr);
   return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -88,6 +94,20 @@ void CP2PUIClientDlg::OnPaint()
 }
 
 
+void CP2PUIClientDlg::UpdateCombobox(const std::vector<int>& peerIds)
+{
+  if(peerIds.empty() == false)
+  {
+    auto combo_box = reinterpret_cast<CComboBox*>(GetDlgItem(IDC_COMBO1));
+    combo_box->ResetContent();
+    for(const auto& peer : peerIds)
+    {
+      combo_box->AddString(std::to_wstring(peer).c_str());
+    }
+  }
+}
+
+
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
 HCURSOR CP2PUIClientDlg::OnQueryDragIcon()
@@ -114,15 +134,7 @@ void CP2PUIClientDlg::OnTimer(UINT_PTR nIDEvent)
   if(nIDEvent == PEER_TIMER)
   {
     const auto list_peer = mClient.ReceiveMessageFromServer(10);
-    if(list_peer.empty() == false)
-    {
-      auto combo_box = reinterpret_cast<CComboBox*>(GetDlgItem(IDC_COMBO1));
-      combo_box->Clear();
-      for(const auto& peer : list_peer)
-      {
-        combo_box->AddString(std::to_wstring(peer).c_str());
-      }
-    }
+    UpdateCombobox(list_peer);
   }
 
   CDialogEx::OnTimer(nIDEvent);

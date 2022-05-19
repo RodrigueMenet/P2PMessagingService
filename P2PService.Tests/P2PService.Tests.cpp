@@ -62,6 +62,10 @@ TEST_CASE("P2PService")
           sent_once = true;
           return sent_msg;
         });
+
+        fakeit::When(Method(mock_registry, Send)).Return();
+
+
         MessageType sent_notifier_id = MessageType::Unknown;
 
         fakeit::When(Method(mock_notifier, Send)).Do([&sent_notifier_id](const IMessage& message)

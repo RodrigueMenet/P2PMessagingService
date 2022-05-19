@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "fakeit.hpp"
+#include "thread"
 
 #include "P2PClient.h"
 #include "SimpleMessage.h"
@@ -22,13 +23,15 @@ TEST_CASE("P2PClient")
     fakeit::When(Method(mock_server_requester, Start)).Return();
     fakeit::When(Method(mock_server_subscriber, Start)).Return();
     fakeit::When(Method(mock_peer_replier, Start)).Return();
-    uint8_t received_uid;
+    PeerUID received_uid;
     fakeit::When(Method(mock_server_requester, Request)).Do([&received_uid](const IMessage& message)
     {
       received_uid = message.SpecificPayload<PeerRegisterPayload>()->UID;
       return nullptr;
     });
     client.Start();
+    client.ConnectToServer();
+
     CHECK(received_uid == CLIENT_UID);
 
     SECTION("Peers available received -> peers ids returned")

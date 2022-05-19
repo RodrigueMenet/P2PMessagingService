@@ -37,6 +37,7 @@ public:
   afx_msg void OnTimer(UINT_PTR nIDEvent);
 
 private:
+  void UpdateCombobox(const std::vector<int>& ids);
   uint8_t mUID;
   ZmqFactory mFactory;
   std::shared_ptr<IRequester> mServerRequester;

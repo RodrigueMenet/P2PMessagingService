@@ -43,8 +43,7 @@ void P2PService::Start()
           continue;
         }
 
-        mRegistry.Send(SimpleMessage(MessageType::PeerMessage));
-
+        
         // build new list
         PeersAvailablePayload payload{};
         auto i = 0;
@@ -52,9 +51,13 @@ void P2PService::Start()
         {
           payload.UIDs[i++] = client;
         }
+        const PayloadMessage<PeersAvailablePayload> available_peers{MessageType::PeersAvailable, payload};
 
-        // warn all users, about up to date user list
-        mNotifier.Send(PayloadMessage<PeersAvailablePayload>{MessageType::PeersAvailable, payload});
+        // answer with available peers
+        mRegistry.Send(available_peers);
+        
+        // warn also other users, about up to date user list
+        mNotifier.Send(available_peers);
       }
     }
   });

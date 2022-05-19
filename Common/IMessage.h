@@ -23,7 +23,7 @@ struct PeerRegisterPayload
 };
 
 
-constexpr auto MAX_CLIENT_NUMBER = 100;
+constexpr auto MAX_CLIENT_NUMBER = 15;
 
 
 struct PeersAvailablePayload
@@ -32,7 +32,7 @@ struct PeersAvailablePayload
 };
 
 
-constexpr auto MAX_MESSAGE_SIZE = 200;
+constexpr auto MAX_MESSAGE_SIZE = 25;
 
 
 struct PeerDisplayMessage

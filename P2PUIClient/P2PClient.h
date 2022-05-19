@@ -15,6 +15,8 @@ struct P2PClient
 
   void Start() const;
 
+  std::vector<int> ConnectToServer();
+
   void AddPeer(int id, const std::shared_ptr<IRequester>& peerRequester);
   void SendMessageToPeer(int id, const std::wstring& msg);
   // @return empty if timeout ; message else
@@ -25,6 +27,7 @@ struct P2PClient
   void Stop();
 
 private:
+  std::vector<int> BuildPeersListFromMsg(IMessage& msg);
   const short mUID;
   IRequester& mServerRequester;
   ISubscriber& mServerSubscriber;

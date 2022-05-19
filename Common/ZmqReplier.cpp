@@ -41,7 +41,7 @@ void ZmqReplier::Stop()
 std::unique_ptr<IMessage> ZmqReplier::Receive(int timeoutMs)
 {
   SetTimeout(timeoutMs);
-  auto msg = std::make_unique<ZmqReceivedMessage >();
+  auto msg = std::make_unique<ZmqReceivedMessage>();
   const auto recv = zmq_recv(mSocket, msg->Get(), msg->Size(), 0);
 
   if(recv < 0 && errno == EAGAIN)

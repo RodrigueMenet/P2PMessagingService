@@ -14,7 +14,6 @@ P2PClient::P2PClient(IRequester& serverRequester, ISubscriber& serverSubscriber,
     , mPeerReplier(peerReplier)
     , mUID(UID)
 {
-  
 }
 
 
@@ -23,14 +22,18 @@ void P2PClient::Start() const
   mServerSubscriber.Start();
   mServerRequester.Start();
   mPeerReplier.Start();
+}
 
-  std::thread([this]
+
+std::vector<int> P2PClient::ConnectToServer()
+{
+  const auto msg = mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
+  if (msg)
   {
-    // wait for subscriber to be fully connected before registering
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
-
-  }).detach();
+    return BuildPeersListFromMsg(*msg);
+  }
+  //else
+  return {};
 }
 
 
@@ -74,13 +77,7 @@ std::vector<int> P2PClient::ReceiveMessageFromServer(int timeoutMs)
 
   if(msg)
   {
-    std::vector<int> ret;
-    const auto payload = msg->SpecificPayload<PeersAvailablePayload>();
-    for(auto i = 0; i < MAX_CLIENT_NUMBER && payload->UIDs[i] != 0; ++i)
-    {
-      ret.push_back(payload->UIDs[i]);
-    }
-    return ret;
+    return BuildPeersListFromMsg(*msg);
   }
 
   return {};
@@ -96,4 +93,19 @@ void P2PClient::Stop()
   {
     peer.second->Stop();
   }
+}
+
+
+std::vector<int> P2PClient::BuildPeersListFromMsg(IMessage& msg)
+{
+  std::vector<int> ret;
+  const auto payload = msg.SpecificPayload<PeersAvailablePayload>();
+  for(auto i = 0; i < MAX_CLIENT_NUMBER && payload->UIDs[i] != 0; ++i)
+  {
+    if (payload->UIDs[i] != mUID)
+    {
+      ret.push_back(payload->UIDs[i]);
+    }
+  }
+  return ret;
 }
