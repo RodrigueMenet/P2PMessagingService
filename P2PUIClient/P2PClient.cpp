@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "SimpleMessage.h"
+#include "thread"
 
 
 P2PClient::P2PClient(IRequester& serverRequester, ISubscriber& serverSubscriber, IReplier& peerReplier, uint8_t UID)
@@ -13,16 +14,23 @@ P2PClient::P2PClient(IRequester& serverRequester, ISubscriber& serverSubscriber,
     , mPeerReplier(peerReplier)
     , mUID(UID)
 {
+  
 }
 
 
 void P2PClient::Start() const
 {
-  mServerRequester.Start();
-  mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
-
   mServerSubscriber.Start();
+  mServerRequester.Start();
   mPeerReplier.Start();
+
+  std::thread([this]
+  {
+    // wait for subscriber to be fully connected before registering
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
+
+  }).detach();
 }
 
 
@@ -84,7 +92,7 @@ void P2PClient::Stop()
   mServerRequester.Stop();
   mServerSubscriber.Stop();
   mPeerReplier.Stop();
-  for (const auto & peer : mPeerRequesters)
+  for(const auto& peer : mPeerRequesters)
   {
     peer.second->Stop();
   }

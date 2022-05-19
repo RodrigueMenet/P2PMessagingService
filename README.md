@@ -11,7 +11,7 @@ Each project have its own unit test project beside (Project.Tests)
 ZMQ middleware is used as messaging layer 
 https://zeromq.org/
 
-Shortcuts for test purpose:
+Shortcuts for demo purpose:
 * only ***DEBUG / x64*** configuration is supported
 * only one test class per test project, would be better to create one classe per tested class Class.Tests.cpp
 * everything has been done locally (127.0.0.1 ip adress used)
@@ -24,3 +24,4 @@ Shortcuts for test purpose:
 * Would be better to use std::chrono (or homemade class overriding std::chrono ; e.g. stdx::chrono) instead of timeoutMs everywhere ; to bring more flexibility about units usage
 * exceptions handling can be a lot improved
 * parameter handling in client execution ; to be improved (to be replaced by a real GUID)
+* subscriber client pattern can be improved (wait 5s -> register -> available peer)

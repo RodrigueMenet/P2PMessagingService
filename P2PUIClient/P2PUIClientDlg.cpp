@@ -40,6 +40,9 @@ END_MESSAGE_MAP()
 
 // CP2PUIClientDlg message handlers
 
+UINT_PTR PEER_TIMER;
+
+
 BOOL CP2PUIClientDlg::OnInitDialog()
 {
   CDialogEx::OnInitDialog();
@@ -49,8 +52,8 @@ BOOL CP2PUIClientDlg::OnInitDialog()
   SetIcon(m_hIcon, TRUE);			// Set big icon
   SetIcon(m_hIcon, FALSE);		// Set small icon
 
-  // TODO: Add extra initialization here
   mClient.Start();
+  SetTimer(PEER_TIMER, 100, nullptr);
   return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -108,8 +111,19 @@ void CP2PUIClientDlg::OnBnClickedOk()
 
 void CP2PUIClientDlg::OnTimer(UINT_PTR nIDEvent)
 {
-  // TODO: Add your message handler code here and/or call default
-
+  if(nIDEvent == PEER_TIMER)
+  {
+    const auto list_peer = mClient.ReceiveMessageFromServer(10);
+    if(list_peer.empty() == false)
+    {
+      auto combo_box = reinterpret_cast<CComboBox*>(GetDlgItem(IDC_COMBO1));
+      combo_box->Clear();
+      for(const auto& peer : list_peer)
+      {
+        combo_box->AddString(std::to_wstring(peer).c_str());
+      }
+    }
+  }
 
   CDialogEx::OnTimer(nIDEvent);
 }
