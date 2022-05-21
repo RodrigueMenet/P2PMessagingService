@@ -34,10 +34,10 @@ Shortcuts for demo purpose:
 # HOW TO BUILD
 #
 
-> Open the P2PMessagingService.sln
-> Select Debug / x64 configuration
-> Build the whole solution
-> You shall find 4 executables, under x64/debug folder
+* Open the P2PMessagingService.sln
+* Select Debug / x64 configuration
+* Build the whole solution
+* You shall find 4 executables, under x64/debug folder
 	* P2PService.exe
 	* P2PUIClient.exe
 	* P2PService.Test.exe
