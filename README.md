@@ -1,8 +1,6 @@
 # P2PMessagingService
 
-#
-# INTRODUCTION
-#
+## INTRODUCTION
 
 Developed with Visual Studio 2022 (toolset **142**, then VS2019 is enough to build)
 
@@ -30,9 +28,7 @@ Shortcuts for demo purpose:
 * parameter handling in client execution ; to be improved (to be replaced by a real GUID)
 * no hearbeat management (to detect client disappearing -> updating the peer lists)
 
-#
-# HOW TO BUILD
-#
+## HOW TO BUILD
 
 * Open the P2PMessagingService.sln
 * Select Debug / x64 configuration
@@ -44,18 +40,14 @@ Shortcuts for demo purpose:
 	* P2PUIClient.Test.exe
 
 
-#
-# HOW TO TEST
-#
+## HOW TO TEST
 
 You can start:
 * either unit tests by launching ./_unit_tests.cmd
 * Or you can start manual tests by launching the ./_tests.cmd
 
 
-# 
-# OPEN QUESTIONS
-#
+## OPEN QUESTIONS
 
 ● What are the limitations of this solution? Are there cases where your service will not work?
 	Listed in the "shortcuts for demo purpose" section
