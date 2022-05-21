@@ -6,9 +6,11 @@ Developed with Visual Studio 2022 (toolset **142**, then VS2019 is enough to bui
 
 P2PMessagingService.sln availabe containing 2 projects producing executables:
 * P2PService (C++14 console application)
-* P2PUIClient (C++14 console application)
+* P2PUIClient (C++14 MFC application)
 
 Each project have its own unit test project beside (Project.Tests)
+
+Beside that a dummy project have been added, just to be able to debug two instances of the client from the same visual studio instance.
 
 ZMQ middleware is used as messaging layer 
 https://zeromq.org/
