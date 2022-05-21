@@ -4,7 +4,6 @@
 # INTRODUCTION
 #
 
-
 Developed with Visual Studio 2022 (toolset **142**, then VS2019 is enough to build)
 
 P2PMessagingService.sln availabe containing 2 projects producing executables:
@@ -50,7 +49,25 @@ Shortcuts for demo purpose:
 #
 
 You can start:
-* either unit tests by launching _unit_tests.cmd
-* Or you can start manual tests by launching the _tests.cmd
+* either unit tests by launching ./_unit_tests.cmd
+* Or you can start manual tests by launching the ./_tests.cmd
 
 
+# 
+# OPEN QUESTIONS
+#
+
+● What are the limitations of this solution? Are there cases where your service will not work?
+	Listed in the "shortcuts for demo purpose" section
+	
+● Does your system scale? Where is the bottleneck? How many users can it support?
+	It can scale up to the current situation sure, I intentionally limited the structure containing Peer IDS to 15, but of course it can be increased, there would be a UI concern regarding Combobox
+	I guess there is of course an uppper limitation for a single service, there could be several in that case, and associated redirection
+
+● What is the attack surface on the system? How could you reduce it?
+	We can connect to both service and any peer, by only knowing the ipaddress / port, then the attack surface is at its maximum. 
+	Could be reduced by at least creating authentification step to the service. Messaging between service and peer would be encrypted to send the authorized key to the peers and peers could be authorized to connect to other peers this way.
+	
+● Compatibility: which OS/browsers/systems is our service compatible with?
+	In this current situation UI is really tightly linked to Windows, because of the MFC UI chosen.
+	For logic it would be pretty easy to port as, ZMQ is portable and only std objects have been used.
