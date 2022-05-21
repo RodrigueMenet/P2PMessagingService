@@ -17,14 +17,15 @@ void P2PService::Start()
   mRegistry.Start();
   mNotifier.Start();
 
-  mAsyncDo = std::async([this]()
+  mAsyncRegister = std::async([this]()
   {
     while(Stopped == false)
     {
       const auto msg = mRegistry.Receive(10);
+
       if(msg && msg->Header().Id == MessageType::PeerRegister)
       {
-        if(ClientUIDs.size() >= MAX_CLIENT_NUMBER)
+        if(mClientUIDs.size() >= MAX_CLIENT_NUMBER)
         {
           std::cerr << "NEW client registration refused : max client number reached (" << MAX_CLIENT_NUMBER << ")";
           continue;
@@ -34,7 +35,7 @@ void P2PService::Start()
         try
         {
           const auto newid = msg->SpecificPayload<PeerRegisterPayload>()->UID;
-          ClientUIDs.push_back(newid);
+          mClientUIDs.push_back(newid);
           std::cout << "Client " << newid << " registered !" << std::endl;
         }
         catch(const std::exception& ex)
@@ -43,21 +44,18 @@ void P2PService::Start()
           continue;
         }
 
+        mRegistry.Send(SimpleMessage(MessageType::PeerRegisterAck));
+
         
         // build new list
         PeersAvailablePayload payload{};
         auto i = 0;
-        for(const auto& client : ClientUIDs)
+        for(const auto& client : mClientUIDs)
         {
           payload.UIDs[i++] = client;
         }
-        const PayloadMessage<PeersAvailablePayload> available_peers{MessageType::PeersAvailable, payload};
-
-        // answer with available peers
-        mRegistry.Send(available_peers);
-        
         // warn also other users, about up to date user list
-        mNotifier.Send(available_peers);
+        mNotifier.Send(PayloadMessage<PeersAvailablePayload>{MessageType::PeersAvailable, payload});
       }
     }
   });
@@ -74,7 +72,7 @@ void P2PService::WaitForShutDown()
 void P2PService::Stop()
 {
   Stopped = true;
-  mAsyncDo.get();
+  mAsyncRegister.get();
   mRegistry.Stop();
   mNotifier.Stop();
 }

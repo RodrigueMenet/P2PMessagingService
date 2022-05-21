@@ -15,7 +15,7 @@
 ZmqFactory::ZmqFactory()
   : mContext(zmq_ctx_new())
 {
-  auto rc = zmq_ctx_set(mContext, ZMQ_IO_THREADS, 2);
+  auto rc = zmq_ctx_set(mContext, ZMQ_IO_THREADS, 1);
 
   if(rc)
   {

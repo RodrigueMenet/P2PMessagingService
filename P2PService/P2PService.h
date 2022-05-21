@@ -6,6 +6,7 @@
 #include <map>
 #include <future>
 #include <list>
+#include <mutex>
 
 struct P2PService
 {
@@ -15,9 +16,9 @@ struct P2PService
   void WaitForShutDown();
 
 private:
-  std::future<void> mAsyncDo;
+  std::future<void> mAsyncRegister;
   std::atomic<bool> Stopped = false;
   IReplier& mRegistry;
   IPublisher& mNotifier;
-  std::list<PeerUID> ClientUIDs;
+  std::list<PeerUID> mClientUIDs;
 };

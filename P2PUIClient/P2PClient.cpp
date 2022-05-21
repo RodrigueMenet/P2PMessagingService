@@ -27,12 +27,7 @@ void P2PClient::Start() const
 
 std::vector<int> P2PClient::ConnectToServer()
 {
-  const auto msg = mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
-  if (msg)
-  {
-    return BuildPeersListFromMsg(*msg);
-  }
-  //else
+  mServerRequester.Request(PayloadMessage<PeerRegisterPayload>(MessageType::PeerRegister, {mUID}));
   return {};
 }
 
@@ -49,9 +44,9 @@ void P2PClient::SendMessageToPeer(int id, const std::wstring& msg)
   try
   {
     PeerDisplayMessage payload;
-    const auto size = min(msg.size(), MAX_MESSAGE_SIZE);
+    const auto size = min(msg.size(), MAX_MESSAGE_SIZE - 1);
     msg.copy(payload.Message, size);
-    payload.Message[size-1] = 0;
+    payload.Message[size] = 0;
     mPeerRequesters.at(id)->Request(PayloadMessage<PeerDisplayMessage>(MessageType::PeerMessage, payload));
   }
   catch(const std::exception& ex)
