@@ -1,6 +1,11 @@
 # P2PMessagingService
 
-Developed with Visual Studio 2022 (toolset **142**)
+#
+# INTRODUCTION
+#
+
+
+Developed with Visual Studio 2022 (toolset **142**, then VS2019 is enough to build)
 
 P2PMessagingService.sln availabe containing 2 projects producing executables:
 * P2PService (C++14 console application)
@@ -24,3 +29,28 @@ Shortcuts for demo purpose:
 * Would be better to use std::chrono (or homemade class overriding std::chrono ; e.g. stdx::chrono) instead of timeoutMs everywhere ; to bring more flexibility about units usage
 * exceptions handling can be a lot improved
 * parameter handling in client execution ; to be improved (to be replaced by a real GUID)
+* no hearbeat management (to detect client disappearing -> updating the peer lists)
+
+#
+# HOW TO BUILD
+#
+
+> Open the P2PMessagingService.sln
+> Select Debug / x64 configuration
+> Build the whole solution
+> You shall find 4 executables, under x64/debug folder
+	* P2PService.exe
+	* P2PUIClient.exe
+	* P2PService.Test.exe
+	* P2PUIClient.Test.exe
+
+
+#
+# HOW TO TEST
+#
+
+You can start:
+* either unit tests by launching _unit_tests.cmd
+* Or you can start manual tests by launching the _tests.cmd
+
+

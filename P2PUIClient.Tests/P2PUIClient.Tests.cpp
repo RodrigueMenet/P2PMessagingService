@@ -50,10 +50,10 @@ TEST_CASE("P2PClient")
 
     SECTION("Send message to a peer")
     {
+      fakeit::When(Method(mock_peer_requester, Start)).Return();
       client.AddPeer(1, std::shared_ptr<IRequester>(&mock_peer_requester.get()));
       std::wstring received_msg;
       fakeit::When(Method(mock_peer_requester, Request)).Do([&received_msg](const IMessage& message)
-
       {
         const auto msg = message.SpecificPayload<PeerDisplayMessage>()->Message;
         received_msg.assign(msg, wcslen(msg));
